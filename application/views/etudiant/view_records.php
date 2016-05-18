@@ -1,4 +1,4 @@
- <link href="<?php echo base_url() ?>assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+ <!--<link href="<?php echo base_url() ?>assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />-->
  <section class="col-sm-10">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -31,11 +31,3 @@
             </div>
           </div>
 </section>
-<script src="<?php echo base_url() ?>assets/js/dataTables/jquery.dataTables.js"></script>
-<script src="<?php echo base_url() ?>assets/js/dataTables/dataTables.bootstrap.js"></script>
- <script type="text/javascript">
-        $(document).ready(function () {
-            $('#dataTables-example').dataTable();
-            initEventModals();
-        });
-  </script>

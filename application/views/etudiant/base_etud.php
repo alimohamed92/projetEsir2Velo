@@ -44,14 +44,14 @@
            <ul class="dropdown-menu">
             <li><a href="">Mois dernier</a></li>
             <li><a href="<?php echo site_url('user/historique'); ?>">Choisir date</a></li>
-            <li><a href="">Réinitialiser</a></li>
+            <li><a href="<?php echo site_url('user/reinitHistorique'); ?>"">Réinitialiser</a></li>
           </ul>
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dossier personnel</a>
           <ul class="dropdown-menu">
-            <li><a href="">données personnelles</a></li>
-            <li><a href="">Mise à jour</a></li>
+            <li><a href="<?php echo site_url('user/donneesPerso'); ?>">données personnelles</a></li>
+            <li><a href="<?php echo site_url('user/donneesPerso'); ?>">Mise à jour</a></li>
           </ul>
         </li>
         <li class="dropdown" <?php if($active=="records") echo 'class="active"'; ?>>
@@ -61,8 +61,8 @@
             <li><a href="<?php echo site_url('user/distance'); ?>">Distance</a></li>
           </ul>
         </li>
-        <li>
-          <a href="#"class="dropdown-toggle" data-toggle="dropdown">Forum</a>
+        <li <?php if($active=="forum") echo 'class="active"'; ?> >
+          <a href="<?php echo site_url('user/forum'); ?>">Forum</a>
         </li>
       </ul>
     </div> 

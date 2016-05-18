@@ -1,4 +1,4 @@
-<?php
+<?php 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
@@ -36,7 +36,7 @@ class User extends CI_Controller
 	    //$res=$this->user->ajouter_deplacement(1, '$depart', '$arrive', 25.68, 15);
 	    $res=$this->user->getCompte($this->input->post('login'),$this->input->post('mp'));
 		if($res['error']==0){	
-		$depart = $this->$this->input->post('depart');
+		$depart = $this->input->post('depart');
 		$arrive = $this->input->post('arrivee');
 		$vitesse = $this->input->post('vitesse');
 		$distance = $this->input->post('distance');
@@ -114,6 +114,89 @@ class User extends CI_Controller
 			$this->load->view("etudiant/view_footer");
 		}
 		
+	}
+
+
+	public function donneesPerso(){
+		$this->check_login_user();
+		$res = $this->user->getInfos($this->session->userdata('idUser'));
+		$data['active']="donnee";
+		$data['donnees']=$res;
+		$this->load->view("etudiant/base_etud", $data);
+		$this->load->view("etudiant/view_donnees", $data);
+		$this->load->view("etudiant/view_footer");
+	}
+
+	public function modifDonneePerso(){
+		$this->check_login_user();
+		$nom = $this->input->post('nom');
+		$prenom = $this->input->post('prenom');
+		$adr = $this->input->post('adresse');
+		$age = $this->input->post('age');
+		$mail = $this->input->post('mail');
+		//var_dump($age); exit();
+		$res = $this->user->modifierUser($this->session->userdata('idUser'),$nom,$prenom,$mail,$adr,$age);
+		redirect(site_url('user/donneesPerso'));
+	}
+
+	public function reinitHistorique(){
+		$this->check_login_user();
+		//$res = $this->user->getInfos($this->session->userdata('idUser'));
+		if($this->input->post('mp') != null){
+			$res=$this->user->getCompte($this->input->post('log'),$this->input->post('mp'));
+			if($res['error']==0){	
+				$this->user->supprimerHistorique($this->session->userdata('idUser'));
+			}
+			else echo "erreur d'authentification";
+		}
+		else{
+		$data['active']="historique";
+		$this->load->view("etudiant/base_etud", $data);
+		$this->load->view("etudiant/view_reinitHistorique");
+		$this->load->view("etudiant/view_footer");
+		}
+		
+	}
+
+	public function forum(){
+		$this->check_login_user();
+		$res = $this->user->getSujets();
+		$data['active']="forum";
+		$data['sujets']=$res;
+		$this->load->view("etudiant/base_etud", $data);
+		$this->load->view("etudiant/view_forum", $data);
+		$this->load->view("etudiant/view_footer");
+	}
+
+	public function messages(){
+		$this->check_login_user();
+		$idSujet = $this->input->get('idSujet');
+		//var_dump($this->input->get('idSujet'));
+		$res = $this->user->getMessages($idSujet);
+		$data['active'] = "forum";
+		$data['messages'] = $res;
+		$data['sujet'] = $idSujet;
+		$data['idUser'] = $this->session->userdata('idUser');
+		$this->load->view("etudiant/base_etud", $data);
+		$this->load->view("etudiant/view_forum", $data);
+		$this->load->view("etudiant/view_footer");
+	}
+
+	public function ajouterMessage(){
+		$this->check_login_user();
+		$idSujet = $this->input->post('idSujet');
+		$idUser = $this->input->post('idUser');
+		$message = $this->input->post('message');
+		$res = $this->user->ajouterMessage($idSujet, $idUser, $message);
+		redirect(site_url('user/messages?idSujet='.$idSujet));
+	}
+
+	public function supprimerMessage(){
+		$this->check_login_user();
+		$idMessage = $this->input->get('idMessage');
+		$idSujet = $this->input->get('idSujet');
+		$res = $this->user->supprimerMessage($idMessage);
+		redirect(site_url('user/messages?idSujet='.$idSujet));
 	}
 
 	private function check_login_user() {

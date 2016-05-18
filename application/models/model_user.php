@@ -60,6 +60,44 @@ class Model_user extends CI_Model
         }
 
 
+    public function getSujets(){
+         $res = $this->db->select('*')
+                            ->from('sujet')
+                            ->order_by('dateAjout', 'desc')
+                            ->get()
+                            ->result_array();
+        return $res;
+    }    
+
+    
+    public function getMessages($idSujet){
+            $res = $this->db->select('*')
+                            ->from('message')
+                            ->order_by('dateAjout', 'desc')
+                            ->where('sujetId', $idSujet)
+                            ->get()
+                            ->result_array();
+            return $res;
+        } 
+
+
+    public function supprimerMessage($id){
+         $tableName = "message";
+         $res = $this->db->where('idMessage',$id)
+                         ->delete($tableName);
+         return $res;
+        }    
+
+
+    public function ajouterMessage($idSujet, $idUser, $message)
+        {
+            return $this->db->set('sujetId', $idSujet)
+                    ->set('idUser',  $idUser)
+                    ->set('message',    $message)
+                    ->set('dateAjout', 'NOW()', false)
+                    ->insert("message");
+        }
+
     public function getHistorique($id,$date1,$date2){
         $where = 'date >= \''.$date1.'\' AND date <= \''.$date2.'\'';
             $res = $this->db->select('*')
@@ -106,5 +144,26 @@ class Model_user extends CI_Model
                     ->set('Age', $age)
                     ->insert("deplacement");
         }
+
+    public function modifierUser($id, $nom, $prenom, $mail, $adresse, $age) {
+        $user = array(
+            'Nom' => $nom,
+            'Prenom' => $prenom,
+            'mail'=> $mail,
+            'adresse'=> $adresse,
+            'Age'=>$age
+            );
+        $res = $this->db->where('Id_User', $id)
+                        ->update($this->table, $user);
+        return $res;
+    }
+
+
+    public function supprimerHistorique($id){
+        $tableName = "deplacement";
+         $res = $this->db->where('idUser',$id)
+                         ->delete($tableName);
+         return $res;
+        }   
 
 }
